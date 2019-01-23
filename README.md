@@ -1,5 +1,5 @@
 # Automatic-Puzzle-Matching-System
-Implemented an auto-controlled system which could solve and win a puzzle game ***Jigty*** with high speed and success rate.  
+Implemented an auto-controlled system which could solve and win a puzzle game ***Jigty***.  
 The result beat most of the other teams and was chosen as the ***"best team"*** .
 
 | puzzle size        | best time    |  average time  |
@@ -90,8 +90,9 @@ The result beat most of the other teams and was chosen as the ***"best team"*** 
   	<img src="https://github.com/jiayuebao/Automatic-Puzzle-Matching-System/blob/master/qtCyberDip/pictures/dragging.png" height=70% width=70%>
 - interaction with the hardware
   - comMoveToScale()
-  - comHitDown()
-  - comHitUp()
-
+  - comHitDown()  
+  - comHitUp()  
+  	<img src="https://github.com/jiayuebao/Automatic-Puzzle-Matching-System/blob/master/qtCyberDip/pictures/device%20dragging.png" height=50% width=50%>
 ## Limitations
--  
+-  With more puzzle pieces overlapped together, the matching speed and accuracy will decreased a lot.
+-  Solve well in small ~ medium size puzzles, but unable to solve large size puzzles like 8\*8.
