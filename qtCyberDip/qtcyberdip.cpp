@@ -901,19 +901,14 @@ void qtCyberDip::capDoubleClickWin(QListWidgetItem* item)
 	capClickConnect();
 }
 
+/**
+ * Finished by Jiayue Bao
+ * Created at Oct. 2016
+ */
 //STEP3:替换这里的图像处理代码Imgprocess
 //每当收到一张图片时都会调用该函数
 void qtCyberDip::processImg(QImage img)
 {
-	//*************************************************************//
-	//                                                             //
-	//                                                             //
-	//         TODO:使用你的代码替换下面的图像处理代码             //
-	//                                                             //
-	//          建议使用comMoveToScale(x,y)发送控制指令            //
-	//                                                             //
-	//*************************************************************//
-
 #ifdef VIA_OPENCV
 	cv::String winName = "Frame";
 
