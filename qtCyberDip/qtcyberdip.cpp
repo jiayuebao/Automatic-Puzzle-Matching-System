@@ -927,9 +927,7 @@ void qtCyberDip::processImg(QImage img)
 	cv::Mat pt = QImage2cvMat(img);
 	cv::imshow(winName, pt);
 	cv::Size imgSize = pt.size();
-	//argM.box.height = 2.6 - 8;
-	//argM.box.width = 46 - 22;
-
+    
 	if (!inputFlag)
 	{
 		qDebug() << "Please input k:";
@@ -938,23 +936,20 @@ void qtCyberDip::processImg(QImage img)
 		return;
 	}
 	//step1：截取原图
-
 	if (!flag)
 	{
-
 		//功能：系统自动截取原图
 		//使用方法：每次先右键点击“开玩”，再左键点击“开玩”（待修改）
 		if (argM.box.x > 0 && argM.box.x < imgSize.width&&
 			argM.box.y > 0 && argM.box.y < imgSize.height)
 		{
-
 			qDebug() << "X:" << argM.box.x << " Y:" << argM.box.y;
 			if (argM.Hit)
 			{
 				comHitDown();
 			}
-			comMoveToScale((1 - ((double)(argM.box.y) + argM.box.height - UP_CUT) / pt.rows), ((double)argM.box.x + argM.box.width) / pt.cols);
-
+			comMoveToScale((1 - ((double)(argM.box.y) + argM.box.height - UP_CUT) / pt.rows),
+                           ((double)argM.box.x + argM.box.width) / pt.cols);
 			argM.box.x = -1; argM.box.y = -1;
 			if (argM.Hit)
 			{
@@ -975,7 +970,6 @@ void qtCyberDip::processImg(QImage img)
 			{
 				//截取拼图部分
 				img_11 = pt(Range(0.235*pt.rows, 0.815*pt.rows), Range(0.1*pt.cols, 0.91*pt.cols));//ipad 大
-
 				//保存image_11
 				cv::imwrite("原图.png", img_11);
 				img_1 = imread("原图.png");
@@ -985,20 +979,11 @@ void qtCyberDip::processImg(QImage img)
 				waitKey(2000);
 				xx = 0;
 			}
-
 		}
 	}
-
 	//step2~3 
 	if (flag)
 	{
-		//step2 原图截取完毕，开始截取拼图块
-		//功能：将待匹配拼图块移到左上角ROI区域
-		//使用方法：右键点击,拼图块自动移到ROI区域
-
-		//调整上方区域和下方区域，上方向下拖一点，下方往上脱一点
-
-		//开始匹配
 		if (!flag3)
 		{
 			{
@@ -1009,7 +994,6 @@ void qtCyberDip::processImg(QImage img)
 				//y的上界和下界
 				int upper = 0;
 				int lower = 0.758*pt.rows;
-
 
 				//背景块的阈值
 				int threshold;
@@ -1026,20 +1010,14 @@ void qtCyberDip::processImg(QImage img)
 					else threshold = (3 * k - 3) * 3;
 				}
 
-
 				//1.扫描四周
 				if (background <threshold)
 				{
-
 					//2*2 && 3*3 &&4*4
 					if (k<5)
 					{
 						value = 1000;
-
-
 						//设置img2图片大小
-
-
 						if (t1 <= 3)//上下上下
 						{
 							width2 = pt.cols / k;
@@ -1069,7 +1047,6 @@ void qtCyberDip::processImg(QImage img)
 
 							//y方向
 							if (t1 % 2 == 1)
-
 							{
 								qDebug() << "down";
 								yy = UP_CUT + 0.758*pt.rows;
@@ -1082,7 +1059,6 @@ void qtCyberDip::processImg(QImage img)
 
 							}
 						}
-
 						else //左右
 						{
 							width2 = pt.cols / (k * 2);
@@ -1093,15 +1069,12 @@ void qtCyberDip::processImg(QImage img)
 
 							step = range2 / threshold;
 
-
 							if (t1 == 4){ yy = UP_CUT; t1++; }
-
 							if (t2 == 2)
 							{
 								t2 = 0; t1 = 0;
 								xx = 0;
 							}
-
 							//y方向
 							if (yy + step < range2)
 							{
@@ -1112,7 +1085,6 @@ void qtCyberDip::processImg(QImage img)
 								yy = UP_CUT;
 								t2++;
 							}
-
 							//x方向
 							if (t2 % 2 == 0)//右
 							{
@@ -1126,15 +1098,12 @@ void qtCyberDip::processImg(QImage img)
 						}//左右结束			
 
 					}
-
-
 					//5*5+
 					else
 					{
 						if (k == 5)
 						{
 							value = 500 / countCenter;//阈值递减
-
 							//上上下下 上上下下
 							if (t1 <= 7)
 							{
@@ -1149,7 +1118,6 @@ void qtCyberDip::processImg(QImage img)
 								if (xx > range1 - step&&t1 % 4 == 3)
 									background = 0;
 								//x方向
-
 								if (xx + step < range1)
 								{
 									if (xx == 0) xx = 1;
@@ -1160,7 +1128,6 @@ void qtCyberDip::processImg(QImage img)
 									xx = 0;
 									t1++;
 								}
-
 								//y方向
 								if (t1 % 4 < 2)//上方两次
 								{
@@ -1173,7 +1140,6 @@ void qtCyberDip::processImg(QImage img)
 									yy = UP_CUT + lower;
 								}
 							}//上下结束
-
 							//左右			
 							else
 							{
@@ -1181,11 +1147,8 @@ void qtCyberDip::processImg(QImage img)
 								height2 = pt.rows*0.19 / 2;
 								range1 = pt.cols - width2;//左右范围
 								range2 = pt.rows - height2;//上下范围
-
 								step = range2 / (4 * k);
 								if (t1 == 8){ yy = UP_CUT; t1++; }
-
-
 								//y方向
 								if (yy + step < range2)
 								{
@@ -1197,7 +1160,6 @@ void qtCyberDip::processImg(QImage img)
 									yy = UP_CUT;
 									t2++;
 								}
-
 								//x方向
 								if (t2 % 2 == 0)//右
 								{
@@ -1207,24 +1169,18 @@ void qtCyberDip::processImg(QImage img)
 								{
 									xx = 0;
 								}
-
 								if (t2 == 2)
 								{
 									t2 = 0; t1 = 0;
 									xx = 0;
 								}
-
-
 							}//左右结束
 						}
-
 						//k>=6
 						else
 						{
 							if(k>=7)value = 10/countCenter;
-							
 							else value = 100 / countCenter;
-							 
 							//上上上下下下
 							if (t1 <= 5)
 							{
@@ -1233,12 +1189,8 @@ void qtCyberDip::processImg(QImage img)
 								height2 = pt.rows*0.19;
 								range1 = pt.cols - width2;//左右范围
 								range2 = pt.rows - height2;//上下范围
-
 								step = range1 / (3 * k);
-
-								
 								//x方向
-
 								if (xx + step < range1)
 								{
 									if (xx == 0) xx = 1;
@@ -1249,7 +1201,6 @@ void qtCyberDip::processImg(QImage img)
 									xx = 0;
 									t1++;
 								}
-
 								//y方向
 								if (t1 % 6 < 3)//上方三次
 								{
@@ -1262,7 +1213,6 @@ void qtCyberDip::processImg(QImage img)
 									yy = UP_CUT + lower;
 								}
 							}//上下结束
-
 							else
 							{
 								//左左右右
@@ -1271,15 +1221,11 @@ void qtCyberDip::processImg(QImage img)
 								height2 = pt.rows*0.19 / 2;
 								range1 = pt.cols - width2;//左右范围
 								range2 = pt.rows - height2;//上下范围
-
 								step = range2 / (4 * k);
 								if (t1 == 6){ yy = UP_CUT; t1++; }
-
-
 								//y方向
 								if (yy + step < range2)
 								{
-
 									yy = yy + step;
 								}
 								else
@@ -1287,7 +1233,6 @@ void qtCyberDip::processImg(QImage img)
 									yy = UP_CUT;
 									t2++;
 								}
-
 								//x方向
 								if (t2 % 4 <= 1)//右
 								{
@@ -1297,7 +1242,6 @@ void qtCyberDip::processImg(QImage img)
 								{
 									xx = 0;
 								}
-
 								if (t2 == 4)
 								{
 									t2 = 0; t1 = 0;
@@ -1305,11 +1249,8 @@ void qtCyberDip::processImg(QImage img)
 								}
 							}//左右结束	
 						}//k>=6结束
-
 					}//k>=5结束
-
 				}//扫描四周结束
-
 
 				//2.兴趣区域移到中间
 				else if (background >= threshold)
@@ -1319,42 +1260,30 @@ void qtCyberDip::processImg(QImage img)
 						tmpx = xx; tmpy = yy;
 						xx = 0;
 					}
-
 					background = threshold + 100;
 
 					int layer;//中间位置扫多少层
 					double lapping = 1 / 5;//重叠度
-
 					//设置图片大小
-
 					if (k <= 5)layer = 5;
 					else
 					{
 						if (countCenter == 1) layer = 5;
 						else layer = k;
 					}
-
-					
-
-
 					//设置img2大小
 					height2 = (0.85*pt.rows - 0.15*pt.rows) / ((layer - 1)*(1 - lapping) + 1);
-					
-
 					if (k <= 5)
 					{
 						width2 = pt.cols / layer;
-
 					}
-
 					else width2 = pt.cols / (layer*1.5);
-
 					step = width2 *0.4;
-
+                    
 					qDebug() << "total:" << total << "m2:" << m2;
 					qDebug() << "countCenter:" << countCenter;
 					qDebug() << "xx:" << xx << "yy:" << yy << "yy+height2:" << yy + height2;
-
+                    
 					//x方向
 					if (xx + step < range1)
 					{
@@ -1366,7 +1295,6 @@ void qtCyberDip::processImg(QImage img)
 						xx = 0;
 						t3++;
 					}
-
 					//y方向
 					yy = 0.15*pt.rows + (t3%layer)*(height2*(1 - lapping));
 
@@ -1382,11 +1310,7 @@ void qtCyberDip::processImg(QImage img)
 							//t1++;
 							return;
 						}
-
 					}
-
-
-
 				}
 
 				img_22 = pt(Rect(xx, yy, width2, height2));
@@ -1395,7 +1319,6 @@ void qtCyberDip::processImg(QImage img)
 				cv::imshow("拼块2", img_2);
 				flag3 = true;
 				/*********************公共变量*************************/
-
 				//检测器
 				SurfFeatureDetector detector(value);
 				//提取器
@@ -1409,21 +1332,15 @@ void qtCyberDip::processImg(QImage img)
 				//置信等级（概率）
 				//double confidence = 0.95;
 
-
 				/*********************************************************step1******************************************************************/
-
 				vector<KeyPoint>keypoints1, keypoints2;
-
 				//a检测surf特征
 				detector.detect(img_1, keypoints1);
 				detector.detect(img_2, keypoints2);
-
 				//进入匹配次数
 				tt++;
 				qDebug() << tt;
-
 				qDebug() << "background" << background;
-
 				//识别为背景
 				if (keypoints2.empty())
 				{
@@ -1436,7 +1353,6 @@ void qtCyberDip::processImg(QImage img)
 				Mat descriptors1, descriptors2;
 				extractor.compute(img_1, keypoints1, descriptors1);
 				extractor.compute(img_2, keypoints2, descriptors2);
-
 				/*********************************************************step2********************************************************************/
 				///*
 				//a创建匹配器
@@ -1450,8 +1366,6 @@ void qtCyberDip::processImg(QImage img)
 				matcher.knnMatch(descriptors1, descriptors2, matches1, 2);
 				matcher.knnMatch(descriptors2, descriptors1, matches2, 2);
 				//qDebug() << "matches1:" << matches1.size() << "   matches2:" << matches2.size();
-
-
 				/******************************************************step3 比率测试**************************************************************/
 				///*
 				int removed1 = 0;
@@ -1465,7 +1379,6 @@ void qtCyberDip::processImg(QImage img)
 							i--;
 							removed1++;
 						}
-
 					}
 					else
 					{
@@ -1474,7 +1387,7 @@ void qtCyberDip::processImg(QImage img)
 						removed1++;
 					}
 				}
-
+                
 				int removed2 = 0;
 				for (int i = 0; i < matches2.size(); i++)
 				{
@@ -1486,7 +1399,6 @@ void qtCyberDip::processImg(QImage img)
 							i--;
 							removed2++;
 						}
-
 					}
 					else
 					{
@@ -1496,9 +1408,7 @@ void qtCyberDip::processImg(QImage img)
 					}
 				}
 				//qDebug() << "removed_1:" << removed_1 << "		removed_2:" << removed_2;
-
 				/****************************************************step4 对称性测试************************************************************/
-
 				vector<DMatch>symMatches;
 				int leftx = 0, lefty = 0, rightx = 0, righty = 0;
 				//遍历左匹配
@@ -1519,16 +1429,13 @@ void qtCyberDip::processImg(QImage img)
 								leftMatchRef[0].distance));
 							break;
 						}
-
 						//if (symMatches.size() > 0)break;
-
 					}
 				}
 
 				vector<DMatch> matches;
 				matches = symMatches;
 				//qDebug() << "matches:" << matches.size();
-
 				//无匹配点
 				if (matches.size() == 0)
 				{
@@ -1563,12 +1470,10 @@ void qtCyberDip::processImg(QImage img)
 									comHitDown();
 									comMoveToScale((1 - (offset + 1) / (pt.rows - UP_CUT)), ((double)(dst1)+argM.box.width) / pt.cols);
 									comHitUp();
-
 								}
 								//下 往上拖
 								else if (yy > UP_CUT + lower - 1)
 								{
-
 									//往上拖
 									comMoveToScale((1 - (pt.rows + argM.box.height-UP_CUT) / (pt.rows - UP_CUT)), ((double)(dst1)+argM.box.width) / pt.cols);
 									comHitDown();
@@ -1576,7 +1481,6 @@ void qtCyberDip::processImg(QImage img)
 									comHitUp();
 								}
 							}
-
 							//左右
 							else
 							{
@@ -1584,7 +1488,6 @@ void qtCyberDip::processImg(QImage img)
 								{
 									if (t2 % 2 == 0)//往左拖
 									{
-
 										comMoveToScale((1 - (double)(dst2 + argM.box.height - UP_CUT) / (pt.rows - UP_CUT)), ((double)(0.98*pt.cols) + argM.box.width) / pt.cols);
 										comHitDown();
 										comMoveToScale((1 - (double)(dst2 + argM.box.height - UP_CUT) / (pt.rows - UP_CUT)), ((double)(0.98*pt.cols) - offset + argM.box.width) / pt.cols);
@@ -1602,7 +1505,6 @@ void qtCyberDip::processImg(QImage img)
 								{
 									if (t2 % 4 <= 1)//往左拖
 									{
-
 										comMoveToScale((1 - (double)(dst2 + argM.box.height - UP_CUT) / (pt.rows - UP_CUT)), ((double)(0.98*pt.cols) + argM.box.width) / pt.cols);
 										comHitDown();
 										comMoveToScale((1 - (double)(dst2 + argM.box.height - UP_CUT) / (pt.rows - UP_CUT)), ((double)(0.98*pt.cols) - offset + argM.box.width) / pt.cols);
@@ -1616,33 +1518,18 @@ void qtCyberDip::processImg(QImage img)
 										comHitUp();
 									}
 								}
-
-
 							}
 						}
-
 					}
-
 					t4++;
 					return;
 				}
 
-
-				//3.计算匹配区域
-
-				//功能：触笔移动拼图块到指定位置
-				//使用方法：将触笔从拼块特征点位置移动至原图特征点位置
-
-
 				/*********************公共变量*************************/
-
-
 				double offsetx1 = 0.1*pt.cols;		//原图x坐标在pt的offset
 				double offsety1 = 0.235*pt.rows;	//原图y坐标在pt的offset
 				double offsetx2 = xx;				//小拼图块x坐标在pt的offset
 				double offsety2 = yy;				//小拼图块y坐标在pt的offset
-
-
 
 				int index;//匹配点号
 				index = tt%matches.size();
@@ -1660,23 +1547,19 @@ void qtCyberDip::processImg(QImage img)
 				double startx2 = offsetx2 + keypoints2[matches[index].trainIdx].pt.x;
 				double starty2 = offsety2 + keypoints2[matches[index].trainIdx].pt.y;
 
-
 				qDebug() << "x1-x2" << abs(dstx1 - startx2) << "y1-y2" << abs(dsty1 - starty2);
 				if (abs(dstx1 - startx2) < 1 && abs(dsty1 - starty2) < 1)
 				{
 					flag3 = false;
 					return;
 				}
-
 				//硬件bug
 				double deform = 5;//触笔的形变量
-
 				double hypotenuse = sqrt((dsty1 - starty2)*(dsty1 - starty2) + (dstx1 - startx2)*(dstx1 - startx2));//拼块匹配点到原图匹配点的斜边
 				double sin = (dsty1 - starty2) / hypotenuse;
 				double cos = (dstx1 - startx2) / hypotenuse;
 				startx2 = offsetx2 + keypoints2[matches[index].trainIdx].pt.x - deform*cos;
 				starty2 = offsety2 + keypoints2[matches[index].trainIdx].pt.y - deform*sin;
-
 
 				//if ((tt % 3 == 1&&background<0)||(tt%2==1&&background>0)||countCenter>1)
 				if (k >= 6)
@@ -1715,7 +1598,6 @@ void qtCyberDip::processImg(QImage img)
 						}
 					}
 				}
-
 				else
 				{
 					if ((k == 5 && ((tt % 3 == 0 && (t1 % 8 == 0 || t1 % 8 == 2)) || ((tt % 3 == 0) && (t1 % 8 == 1 || t1 % 8 == 3)) || (tt % 1 == 0 && t1 % 8 >= 4))) || k < 5 && tt % 2 == 0 || tt>200 || countCenter > 1)
@@ -1726,17 +1608,11 @@ void qtCyberDip::processImg(QImage img)
 						comHitUp();
 					}
 				}
-
 				flag3 = false;
 			}
-
 		}//match结束
-
 	}//processimg函数结束
-
-
 #endif
-
 }
 
 
