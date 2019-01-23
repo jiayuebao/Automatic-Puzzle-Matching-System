@@ -22,26 +22,26 @@ The result beat most of the other teams and was chosen as the ***"best team"*** 
 ## Implementation
  Please check **qtCyberDip::processImg** for a more detailed look of my work.
 
-### Preprocessing
+### Step 1: Preprocessing
 - Jigty installed on smartphone/tablet 
 - Adjust the screen size with CyberDip device 
 
-### Step 1: Scan: search the puzzle pieces 
+### Step 2: Scan: search the puzzle pieces 
 - **Dynamic moving ROI**  
   - ROI height: H * 0.27
   - ROI width: W / n
   - ROI moving step (fast): H / (2n-1)
   - ROI moving step (slow): H / (4n-1)  
   ***(Note: image size is H * W and has n\*n puzzle pieces)*** 
-- **Moving pattern** 
-	- puzzle size : 2 \* 2 ~ 4 \* 4
-  <img src="https://github.com/jiayuebao/Automatic-Puzzle-Matching-System/blob/master/qtCyberDip/pictures/scan4.png" height=50%, width=50%>
-	- puzzle size : 5 \* 5 
-	- puzzle size : 6 \* 6 ~ 8 \* 8	 
-    
-    
+- **Moving pattern**    
+  - Applied different ROI moving pattern for puzzle of **small size**, **medium size**, and **large size**.   
+  - There will be more scan times when the puzzle size becomes larger. 
+  <img src="https://github.com/jiayuebao/Automatic-Puzzle-Matching-System/blob/master/qtCyberDip/pictures/scan4.png" height=30%, width=30%> 
+  
+  <img src="https://github.com/jiayuebao/Automatic-Puzzle-Matching-System/blob/master/qtCyberDip/pictures/scan5.png" height=20%, width=30%> 
+  <img src="https://github.com/jiayuebao/Automatic-Puzzle-Matching-System/blob/master/qtCyberDip/pictures/scan6.png" height=20%, width=30%> 
 
-### Step 2: Match 
+### Step 3: Match 
 - **Feature Detection**
   - SURF detector
   ```
@@ -78,13 +78,16 @@ The result beat most of the other teams and was chosen as the ***"best team"*** 
     if ((optimal match/suboptimal match) > ratio) remove;
     else keep;
     ```
+    <img src="https://github.com/jiayuebao/Automatic-Puzzle-Matching-System/blob/master/qtCyberDip/pictures/ratio testing.png"> 
 - **Symmetric Testing**
   -  make sure the match points for two images are the same
+ 	<img src="https://github.com/jiayuebao/Automatic-Puzzle-Matching-System/blob/master/qtCyberDip/pictures/symmetric testing.png" height=50% width=50%>   
  
-### Step 3: Drag 
+### Step 4: Drag 
 - matching point to matching point 
   - find the matching position on the original image and the puzzle piece 
   - calculate the moving direction and distance
+  	<img src="https://github.com/jiayuebao/Automatic-Puzzle-Matching-System/blob/master/qtCyberDip/pictures/dragging.png" height=70% width=70%>
 - interaction with the hardware
   - comMoveToScale()
   - comHitDown()
